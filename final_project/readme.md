@@ -214,13 +214,13 @@ def class_norm_criterion(tensor1, tensor2, mean, variance):
     <img alt="Валидация" src="./assets/use_cases/validation.png" width="700px" />
 </div><br/>
 2. Визуальная фильтрация по типу местности
-   
+
    Пример - фильтр для выбора максимально подходящей местности на карте для сервиса недвижимости. 
 <br/><br/><div align="center" >
     <img alt="Фильтрация" src="./assets/use_cases/filters.png" width="700px" />
 </div><br/>
 3. Генерация контента
-   
+
    Для природных объектов на карте, не снабженных пользовательскими фотографиями. 
 <br/><br/><div align="center" >
     <img alt="Контент" src="./assets/use_cases/content.png" width="700px" />
