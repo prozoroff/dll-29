@@ -91,11 +91,25 @@
 
 ### Архитектура и обучение энкодера
 
-| MSE Loss | <img src="./assets/loss_samples/real1.png" width="100" height="100"> | <img src="./assets/loss_samples/real2.png" width="100" height="100"> | <img src="./assets/loss_samples/real3.png" width="100" height="100"> |
+#### Выбор функции потерь
+
+| MSE Loss | <img src="./assets/loss_samples/real1.png" width="80" height="80"> | <img src="./assets/loss_samples/real2.png" width="80" height="80"> | <img src="./assets/loss_samples/real3.png" width="80" height="80"> |
 | - | :-: | :-: | :-: |
-| <img src="./assets/loss_samples/gen1.png" width="100" height="100"> | **0.14** | 0.46 | 0.22 |
-| <img src="./assets/loss_samples/gen2.png" width="100" height="100"> | 0.40 | 0.43 | **0.30** |
-| <img src="./assets/loss_samples/gen3.png" width="100" height="100"> | 0.61 | 0.27 | **0.22** |
+| <img src="./assets/loss_samples/gen1.png" width="80" height="80"> | **0.14** | 0.46 | 0.22 |
+| <img src="./assets/loss_samples/gen2.png" width="80" height="80"> | 0.40 | 0.43 | **0.30** |
+| <img src="./assets/loss_samples/gen3.png" width="80" height="80"> | 0.61 | 0.27 | **0.22** |
+
+| SSIM Loss | <img src="./assets/loss_samples/real1.png" width="80" height="80"> | <img src="./assets/loss_samples/real2.png" width="80" height="80"> | <img src="./assets/loss_samples/real3.png" width="80" height="80"> |
+| - | :-: | :-: | :-: |
+| <img src="./assets/loss_samples/gen1.png" width="80" height="80"> | **0.84** | 0.96 | 0.96 |
+| <img src="./assets/loss_samples/gen2.png" width="80" height="80"> | **0.90** | **0.90** | 0.94 |
+| <img src="./assets/loss_samples/gen3.png" width="80" height="80"> | 1.05 | **0.89** | 0.92 |
+
+| Custom Loss | <img src="./assets/loss_samples/real1.png" width="80" height="80"> | <img src="./assets/loss_samples/real2.png" width="80" height="80"> | <img src="./assets/loss_samples/real3.png" width="80" height="80"> |
+| - | :-: | :-: | :-: |
+| <img src="./assets/loss_samples/gen1.png" width="80" height="80"> | **3.40** | 4.23 | 4.37 |
+| <img src="./assets/loss_samples/gen2.png" width="80" height="80"> | 6.79 | **4.08** | 4.61 |
+| <img src="./assets/loss_samples/gen3.png" width="80" height="80"> | 5.67 | 3.16 | **2.66** |
 
 ![Архитектура энкодера](./assets/encoder.png)
 
