@@ -46,10 +46,12 @@
                  preset: 'islands#circleDotIcon',
                  iconColor: 'black'
                }))
-         
-               fetch(`http://127.0.0.1:5000/?ll=${ll}`).catch(() => {
-                 document.getElementById('image').src = `${ll}.jpg`;
-               })
+
+               fetch(`http://127.0.0.1:5000/?ll=${ll}`)
+                .catch(() => {})
+                .then(() => {
+                  document.getElementById('image').src = `${ll}.jpg`;
+               });
              }
            );
          }
