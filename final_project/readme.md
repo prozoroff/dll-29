@@ -1,4 +1,4 @@
-# Генерация изображений окружающего пространства по спутниковым снимкам
+# Генерация изображений ландшафта по данным спутниковой съемки с использованием глубокого обучения
 
 В общем виде задача, решаемая в работе, звучит так: «интерпретировать спутниковый снимок и предсказать что увидит наблюдатель, оказавшись в этой точке Земли».
 В качестве исходной информации для генерации изображения окружающей среды выступает только спутниковый снимок (ну и, соответственно, веса обученных нейронных сетей).
@@ -142,21 +142,75 @@
 
 Для сравнения для изображений выше попарно были посчитаны значения функций потерь на основе MSE и SSIM. Результаты получились следующие:
 
-| MSE Loss | <img src="./assets/loss_samples/real1.png" width="80" height="80"> | <img src="./assets/loss_samples/real2.png" width="80" height="80"> | <img src="./assets/loss_samples/real3.png" width="80" height="80"> |
-| - | :-: | :-: | :-: |
-| <img src="./assets/loss_samples/gen1.png" width="80" height="80"> | **0.14** | 0.46 | 0.22 |
-| <img src="./assets/loss_samples/gen2.png" width="80" height="80"> | 0.40 | 0.43 | **0.30** |
-| <img src="./assets/loss_samples/gen3.png" width="80" height="80"> | 0.61 | 0.27 | **0.22** |
+<div align="center"></p>
+<table>
+    <thead>
+        <tr>
+            <th align="center">MSE Loss</th>
+            <th align="center"><img src="./assets/loss_samples/real1.png" width="80" height="80"></th>
+            <th align="center"><img src="./assets/loss_samples/real2.png" width="80" height="80"></th>
+            <th align="center"><img src="./assets/loss_samples/real3.png" width="80" height="80"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td align="center"><img src="./assets/loss_samples/gen1.png" width="80" height="80"></td>
+            <td align="center"><b>0.14</b></td>
+            <td align="center">0.46</td>
+            <td align="center">0.22</td>
+        </tr>
+        <tr>
+            <td align="center"><img src="./assets/loss_samples/gen2.png" width="80" height="80"></td>
+            <td align="center">0.40</td>
+            <td align="center">0.43</td>
+            <td align="center"><b>0.30</b></td>
+        </tr>
+        <tr>
+            <td align="center"><img src="./assets/loss_samples/gen3.png" width="80" height="80"></td>
+            <td align="center">0.61</td>
+            <td align="center">0.27</td>
+            <td align="center"><b>0.22</b></td>
+        </tr>
+    </tbody>
+</table>
+</div>
 
-| SSIM Loss | <img src="./assets/loss_samples/real1.png" width="80" height="80"> | <img src="./assets/loss_samples/real2.png" width="80" height="80"> | <img src="./assets/loss_samples/real3.png" width="80" height="80"> |
-| - | :-: | :-: | :-: |
-| <img src="./assets/loss_samples/gen1.png" width="80" height="80"> | **0.84** | 0.96 | 0.96 |
-| <img src="./assets/loss_samples/gen2.png" width="80" height="80"> | **0.90** | **0.90** | 0.94 |
-| <img src="./assets/loss_samples/gen3.png" width="80" height="80"> | 1.05 | **0.89** | 0.92 |
+<div align="center"></p>
+<table>
+    <thead>
+        <tr>
+            <th align="center">SSIM Loss</th>
+            <th align="center"><img src="./assets/loss_samples/real1.png" width="80" height="80"></th>
+            <th align="center"><img src="./assets/loss_samples/real2.png" width="80" height="80"></th>
+            <th align="center"><img src="./assets/loss_samples/real3.png" width="80" height="80"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td align="center"><img src="./assets/loss_samples/gen1.png" width="80" height="80"></td>
+            <td align="center"><b>0.84</b></td>
+            <td align="center">0.96</td>
+            <td align="center">0.96</td>
+        </tr>
+        <tr>
+            <td align="center"><img src="./assets/loss_samples/gen2.png" width="80" height="80"></td>
+            <td align="center"><b>0.90</b></td>
+            <td align="center"><b>0.90</b></td>
+            <td align="center">0.94</td>
+        </tr>
+        <tr>
+            <td align="center"><img src="./assets/loss_samples/gen3.png" width="80" height="80"></td>
+            <td align="center">1.05</td>
+            <td align="center"><b>0.89</b></td>
+            <td align="center">0.92</td>
+        </tr>
+    </tbody>
+</table>
+</div>
 
 Код SSIM, использовавшийся в сравнении, представлен в файле: [gan.ipynb](./ssim.py).
 
-Идеальная для данной задачи функция должна вернуть минимальные значения для схожих пар. Эти значения расположились на главной диагонали матрицы. Однако ни MSE, ни SSIM не отвечают этому в достаточной степени. Поэтому в задаче использовалась специальная функция потерь, основанная на предобученной модели классификатора, использовавшегося при формировании датасета. Схема проста:
+Идеальная для данной задачи функция должна вернуть минимальные значения для схожих пар. Эти значения расположились на главной диагонали матрицы. Однако ни MSE, ни SSIM не отвечают этому в достаточной степени. Поэтому в задаче использовалась специальная функция потерь, основанная на предобученной модели классификатора, использовавшегося при формировании датасета (предобученная на датасете Places365). Схема проста:
 
 1. Получаем поклассовые вероятности для первого изображения
 2. Получаем поклассовые вероятности для второго изображения
@@ -164,11 +218,38 @@
 
 Результаты превзошли предыдущие два подхода:
 
-| Custom<br/> Loss | <img src="./assets/loss_samples/real1.png" width="80" height="80"> | <img src="./assets/loss_samples/real2.png" width="80" height="80"> | <img src="./assets/loss_samples/real3.png" width="80" height="80"> |
-| - | :-: | :-: | :-: |
-| <img src="./assets/loss_samples/gen1.png" width="80" height="80"> | **3.40** | 4.23 | 4.37 |
-| <img src="./assets/loss_samples/gen2.png" width="80" height="80"> | 6.79 | **4.08** | 4.61 |
-| <img src="./assets/loss_samples/gen3.png" width="80" height="80"> | 5.67 | 3.16 | **2.66** |
+<div align="center"></p>
+<table>
+    <thead>
+        <tr>
+            <th align="center">Custom<br/>Loss </th>
+            <th align="center"><img src="./assets/loss_samples/real1.png" width="80" height="80"></th>
+            <th align="center"><img src="./assets/loss_samples/real2.png" width="80" height="80"></th>
+            <th align="center"><img src="./assets/loss_samples/real3.png" width="80" height="80"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td align="center"><img src="./assets/loss_samples/gen1.png" width="80" height="80"></td>
+            <td align="center"><b>3.40</b></td>
+            <td align="center">4.23</td>
+            <td align="center">4.37</td>
+        </tr>
+        <tr>
+            <td align="center"><img src="./assets/loss_samples/gen2.png" width="80" height="80"></td>
+            <td align="center">6.79</td>
+            <td align="center"><b>4.08</b></td>
+            <td align="center">4.61</td>
+        </tr>
+        <tr>
+            <td align="center"><img src="./assets/loss_samples/gen3.png" width="80" height="80"></td>
+            <td align="center">5.67</td>
+            <td align="center">3.16</td>
+            <td align="center"><b>2.66</b></td>
+        </tr>
+    </tbody>
+</table>
+</div>
 
 Отдельной сложностью здесь явилось то, что на самых первых эпохах связка энкодер-генератор имела свойство сваливаться к краям скрытого пространства, откуда в последствии выбраться не удавалось. Поэтому была введена поправка на степень близости полученной выборки состояний в пределах батча к нормальному распределению (по аналогии с расстоянием Кульбака — Лейблера). Эта мера адекватна при достаточно больших размеров батчей, так как при обучении генератора использовался шум с нормальным распределением.
 
@@ -205,26 +286,42 @@ def class_norm_criterion(tensor1, tensor2, mean, variance):
 
 ## Практическая значимость
 
-Полученная система может применяться в массе случаев, когда требуется визуальное подкрепление, а единственной актуальной и достоверной информацией о местности служит спутниковый снимок. Ниже приведены несколько возможных путей использования разработки.
+Полученная система может применяться в массе случаев, когда требуется визуальное подкрепление, а единственной актуальной и достоверной информацией о местности служит спутниковый снимок. 
 
-1. Валидация загружаемых пользователями фотографий
+### Примеры использования
 
-   Зачастую, в картографических сервисах (живой пример - Яндекс Карты) попадаются объекты, например фотографии или панорамы, с ошибочной геопривязкой. Проверить корректность загружаемой фотографии заявленной точке на карте - подходящая задача для этой системы.
+Ниже приведены несколько возможных путей использования разработки.
+
+#### Валидация загружаемых пользователями фотографий
+
+Зачастую, в картографических сервисах (живой пример - Яндекс Карты) попадаются объекты, например фотографии или панорамы, с ошибочной геопривязкой. Проверить корректность загружаемой фотографии заявленной точке на карте - подходящая задача для этой системы.
 <div align="center" >
     <img alt="Валидация" src="./assets/use_cases/validation.png" width="700px" />
 </div><br/>
-2. Визуальная фильтрация по типу местности
 
-   Пример - фильтр для выбора максимально подходящей местности на карте для сервиса недвижимости. 
+#### Визуальная фильтрация по типу местности
+
+Пример - фильтр для выбора максимально подходящей местности на карте для сервиса подбора недвижимости. 
 <br/><br/><div align="center" >
     <img alt="Фильтрация" src="./assets/use_cases/filters.png" width="700px" />
 </div><br/>
-3. Генерация контента
 
-   Для природных объектов на карте, не снабженных пользовательскими фотографиями. 
+#### Генерация контента
+
+Для природных (а в общем и не только) объектов на карте, не снабженных пользовательскими фотографиями. 
 <br/><br/><div align="center" >
     <img alt="Контент" src="./assets/use_cases/content.png" width="700px" />
 </div><br/>
    
 ## Выводы
+
+Результатом работы является не столько обученные модели для генерации изображений ландшафта по спутниковым снимкам, сколько методика создания такой системы и в целом подтверждение работоспособности такого подхода. 
+
+Практические результаты следующие:
+1. Разработана методика формирования датасета связанных географическими координатами пар изображений спутник-ландшафт
+2. Разработаны архитектуры для трех моделей (генератор, дискриминатор, энкодер)
+3. Предложены методики обучения данных моделей
+
+Можно с уверенностью утверждать, что при кратно большем датасете и доступных вычислительных мощностях результаты генерации должны значительно превзойти полученные в работе. Как в плане размера изображений и их качества, так и в плане разнообразия ландшафтов (населенные пункты, горная местность, дорожная инфраструктура и т.п.). Но это, к сожалению, выходит за рамки данной работы. 
+
 
